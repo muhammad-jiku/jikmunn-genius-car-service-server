@@ -8,14 +8,14 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = process.env.PORT || 5001;
-const corsOptions = {
-  origin: 'https://jikmunn-genius-car-service.web.app/',
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: 'https://jikmunn-genius-car-service.web.app/',
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
 
 // middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
