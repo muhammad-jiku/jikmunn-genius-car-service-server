@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 // require('crypto').randomBytes(64).toString('hex')
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 // const corsOptions = {
 //   origin: 'https://jikmunn-genius-car-service.web.app/',
 //   credentials: true, //access-control-allow-credentials:true
