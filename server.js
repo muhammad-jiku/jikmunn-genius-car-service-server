@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
   res.send('Hello there');
 });
 
+app.get('/jiku', (req, res) => {
+  res.send('Hello there! This is jiku');
+});
+
 const verifyJwt = (req, res, next) => {
   const authHeader = req.headers.authorization;
   // console.log(req.headers);
