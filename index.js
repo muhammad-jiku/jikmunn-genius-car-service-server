@@ -1,12 +1,7 @@
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const createRoutes = require('./routes');
-// require('crypto').randomBytes(64).toString('hex')
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 // middleware
 app.use(cors());
@@ -17,36 +12,39 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.send('Hello there! This is uri is for health checkup.');
+  res.send('Hello there! This uri is for health checkup.');
 });
 
-// DB Connection
-const uri = `${process.env.DB_URI}`;
+// DB Connection and server start
+const uri = process.env.DB_URI;
+const dbName = process.env.DB_NAME;
 const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-const run = async () => {
+async function startServer() {
   try {
     await client.connect();
-    const dbName = process.env.DB_NAME;
     if (!dbName) {
       console.error('DB_NAME environment variable is not set.');
-      return;
+      process.exit(1);
     }
     const servicesCol = client.db(dbName).collection('svc');
     const ordersCol = client.db(dbName).collection('ord');
 
-    // All routes under /api
     app.use('/api', createRoutes(servicesCol, ordersCol));
     console.log('API routes registered at /api');
+
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
   } catch (err) {
-    console.error('Failed to connect to MongoDB or register routes:', err);
+    console.error('Failed to connect to MongoDB or start server:', err);
+    process.exit(1);
   }
-};
-run().catch((err) => {
-  console.error('Unexpected error during server startup:', err);
-});
+}
+
+startServer();
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
